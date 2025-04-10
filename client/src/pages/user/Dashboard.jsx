@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaTruck, FaShieldAlt, FaIndustry, FaShoppingCart, FaCheckCircle } from "react-icons/fa";
+import Navbar from "./Navbar";
 
 const Home = () => {
   const navigate = useNavigate();
 
   return (
+    <><Navbar/>
     <div className="min-h-screen bg-gray-100 text-gray-900">
       {/* Hero Section */}
       <header
@@ -22,7 +24,7 @@ const Home = () => {
           <p className="mt-4 text-lg">Top-quality construction materials for your next project.</p>
           <button
             className="mt-6 bg-red-600 hover:bg-red-500 transition px-6 py-3 text-lg font-semibold rounded-lg shadow-lg"
-            onClick={() => navigate("/shop")}
+            onClick={() => navigate("/Product")}
           >
             Shop Now
           </button>
@@ -93,7 +95,7 @@ const Home = () => {
         <p className="mt-3 opacity-90">Order high-quality construction materials at unbeatable prices.</p>
         <button
           className="mt-6 bg-white text-red-600 hover:bg-gray-200 transition px-6 py-3 text-lg font-semibold rounded-lg"
-          onClick={() => navigate("/shop")}
+          onClick={() => navigate("/Product")}
         >
           Start Shopping
         </button>
@@ -104,6 +106,7 @@ const Home = () => {
         <p>&copy; 2025 IronTech E-Commerce. All rights reserved.</p>
       </footer>
     </div>
+    </>
   );
 };
 
