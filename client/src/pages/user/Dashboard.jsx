@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { FaTruck, FaShieldAlt, FaIndustry, FaShoppingCart, FaCheckCircle } from "react-icons/fa";
 import Navbar from "./Navbar";
 
@@ -36,7 +37,15 @@ const Home = () => {
         <h2 className="text-3xl font-bold text-center mb-10">Featured Products</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[1, 2, 3].map((id) => (
-            <div key={id} className="p-6 bg-white rounded-lg shadow-lg text-center">
+            // <div key={id} className="p-6 bg-white rounded-lg shadow-lg text-center">
+            <motion.div
+              key={id}
+              className="p-6 bg-white rounded-lg shadow-lg text-center"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: id * 0.2 }}
+              viewport={{ once: true }}
+            >
               <img
                 src={`https://images.pexels.com/photos/4481326/pexels-photo-4481326.jpeg`}
                 alt="Iron Rod"
@@ -50,7 +59,8 @@ const Home = () => {
               >
                 <FaShoppingCart className="inline mr-2" /> Add to Cart
               </button>
-            </div>
+              </motion.div>
+            // </div>
           ))}
         </div>
       </section>

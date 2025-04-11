@@ -112,6 +112,41 @@ router.get("/user/:userId", async (req, res) => {
       res.status(500).json({ error: "Error updating order" });
     }
   });
+  // Retieve yr for histogram
+  router.get("/sales/:year", async (req, res) => {
+    const year = parseInt(req.params.year);
+    const start = new Date(`${year}-01-01`);
+    const end = new Date(`${year + 1}-01-01`);
+  
+    try {
+      const orders = await Order.aggregate([
+        {
+          $match: {
+            status: "Accepted",
+            orderDate: { $gte: start, $lt: end },
+          },
+        },
+        {
+          $group: {
+            _id: { $month: "$orderDate" },
+            totalSales: { $sum: "$totalAmount" },
+          },
+        },
+        {
+          $project: {
+            month: "$_id",
+            totalSales: 1,
+            _id: 0,
+          },
+        },
+        { $sort: { month: 1 } },
+      ]);
+  
+      res.json(orders);
+    } catch (err) {
+      res.status(500).json({ error: "Failed to fetch sales data" });
+    }
+  });
   
   // PUT: Reject an order
   router.put("/:id/reject", async (req, res) => {
