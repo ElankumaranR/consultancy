@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"; // correct path
-
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom"; 
 const Navbar = () => {
   const { logout, user } = useAuth();
-
+  const navigate = useNavigate(); // useNavigate hook to programmatically navigate
   const handleLogout = async () => {
     try {
       await logout(); // ✅ logout is a function from context

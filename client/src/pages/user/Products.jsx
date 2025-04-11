@@ -33,7 +33,7 @@ const Product = () => {
   const fetchCart = async () => {
     if (!user) return;
     try {
-      const response = await axios.get(`http://localhost:5000/api/cart/${user.uid}`);
+      const response = await axios.get(`http://localhost:5000/api/cart/${user.email}`);
       setCart(response.data);
     } catch (error) {
       console.error("Error fetching cart:", error);
@@ -41,7 +41,7 @@ const Product = () => {
   };
 
   const handleAddToCart = async (item) => {
-    const userId = user.uid;
+    const userId = user.email;
     const quantity = parseFloat(weightToAdd[item._id]);
 
     if (!quantity || quantity <= 0) {
@@ -96,7 +96,7 @@ const Product = () => {
   };
 
   const handleCheckout = async () => {
-    const userId = user.uid;
+    const userId = user.email;
     const totalPrice = cart.reduce(
       (sum, item) => sum + item.quantity * item.pricePerKg,
       0

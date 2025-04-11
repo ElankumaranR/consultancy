@@ -6,7 +6,7 @@ import Navbar from "./Navbar";
 const Order = () => {
   const auth = getAuth();
   const user = auth.currentUser;
-  const userId = user.uid; // Or use context/auth hook
+  const userId = user.email; // Or use context/auth hook
   const [orders, setOrders] = useState([]);
   const [message, setMessage] = useState("");
 
@@ -18,6 +18,7 @@ const Order = () => {
     try {
       const res = await axios.get(`http://localhost:5000/api/orders/user/${userId}`);
       // Safely set orders
+      console.log(res,userId)
       if (Array.isArray(res.data)) {
         setOrders(res.data);
       } else if (Array.isArray(res.data.orders)) {
