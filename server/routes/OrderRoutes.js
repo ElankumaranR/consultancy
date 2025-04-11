@@ -147,6 +147,46 @@ router.get("/user/:userId", async (req, res) => {
       res.status(500).json({ error: "Failed to fetch sales data" });
     }
   });
+  //Analytics fr admin components
+  router.get("/analytics/:year", async (req, res) => {
+    const { year } = req.params;
+    const start = new Date(`${year}-01-01`);
+    const end = new Date(`${parseInt(year) + 1}-01-01`);
+  
+    try {
+      const orders = await Order.find({
+        orderDate: { $gte: start, $lt: end },
+        status: "Accepted",
+      });
+  
+      // Monthly revenue calculation
+      const monthlySales = Array(12).fill(0);
+      let totalRevenue = 0;
+      let totalOrders = 0;
+      const categorySales = {};
+  
+      for (const order of orders) {
+        const month = new Date(order.orderDate).getMonth();
+        monthlySales[month] += order.totalAmount;
+        totalRevenue += order.totalAmount;
+        totalOrders += 1;
+  
+        for (const item of order.items) {
+          categorySales[item.category] = (categorySales[item.category] || 0) + item.quantity;
+        }
+      }
+  
+      res.json({
+        monthlySales,
+        totalRevenue,
+        totalOrders,
+        categorySales,
+      });
+    } catch (err) {
+      res.status(500).json({ error: "Analytics fetch failed" });
+    }
+  });
+  
   
   // PUT: Reject an order
   router.put("/:id/reject", async (req, res) => {
