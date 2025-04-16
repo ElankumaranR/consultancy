@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
+import { motion } from "framer-motion";
 import Navbar from "./Navbar";
 const Product = () => {
   const [items, setItems] = useState([]);
@@ -172,35 +173,42 @@ const Product = () => {
       <div className="flex">
         {/* Product Grid */}
         <div className={`transition-all duration-500 px-4 md:px-20 flex-1 ${showCart && !isLargeScreen ? 'hidden' : 'block'}`}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {filteredItems.map((item) => (
-              <div key={item._id} className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-40 object-cover rounded-md mb-4"
-                />
-                <h2 className="text-xl font-semibold text-slate-800">{item.name}</h2>
-                <p className="text-gray-600 mb-2">₹{item.pricePerKg} / Kg</p>
-                <input
-                  type="number"
-                  placeholder="Weight in Kg"
-                  min="1"
-                  className="border rounded p-1 w-full mb-2"
-                  value={weightToAdd[item._id] || ""}
-                  onChange={(e) =>
-                    setWeightToAdd({ ...weightToAdd, [item._id]: e.target.value })
-                  }
-                />
-                <button
-                  onClick={() => handleAddToCart(item)}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded w-full"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {filteredItems.map((item, index) => (
+            <motion.div
+              key={item._id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+              className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-full h-40 object-cover rounded-md mb-4"
+              />
+              <h2 className="text-xl font-semibold text-slate-800">{item.name}</h2>
+              <p className="text-gray-600 mb-2">₹{item.pricePerKg} / Kg</p>
+              <input
+                type="number"
+                placeholder="Weight in Kg"
+                min="1"
+                className="border rounded p-1 w-full mb-2"
+                value={weightToAdd[item._id] || ""}
+                onChange={(e) =>
+                  setWeightToAdd({ ...weightToAdd, [item._id]: e.target.value })
+                }
+              />
+              <button
+                onClick={() => handleAddToCart(item)}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded w-full"
+              >
+                Add to Cart
+              </button>
+            </motion.div>
+          ))}
+        </div>
         </div>
 
         {/* Slide-In Cart */}
