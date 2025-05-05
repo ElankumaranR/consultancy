@@ -12,6 +12,7 @@ const ManageProduct = () => {
     description: "",
     category: "",
     image: "",
+    availability: "",
   });
   const [editItemId, setEditItemId] = useState(null);
 
@@ -45,6 +46,7 @@ const ManageProduct = () => {
         description: "",
         category: "",
         image: "",
+        availability: "",
       });
       fetchItems();
     } catch (err) {
@@ -124,6 +126,15 @@ const ManageProduct = () => {
             className="p-2 border rounded"
             required
           />
+          <input
+            type="number"
+            name="availability"
+            placeholder="Availability (Number of Bars)"
+            value={item.availability}
+            onChange={handleChange}
+            className="p-2 border rounded"
+            required
+          />
           <textarea
             name="description"
             placeholder="Description"
@@ -163,6 +174,7 @@ const ManageProduct = () => {
               <p className="mt-1">Price: ₹{it.pricePerKg} / Kg</p>
               <p>Weight per Bar: {it.weightPerBar} Kg</p>
               <p>Length: {it.length || "12"} m</p>
+              <p>Availability: {it.availability} bars</p>
               <p className="text-xs text-gray-500">Category: {it.category}</p>
 
               <div className="mt-3 flex gap-2">

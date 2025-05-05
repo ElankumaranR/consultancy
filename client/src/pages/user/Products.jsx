@@ -44,12 +44,10 @@ const Product = () => {
   const handleAddToCart = async (item) => {
     const userId = user.email;
     const quantity = parseFloat(weightToAdd[item._id]);
-
     if (!quantity || quantity <= 0) {
-      alert("Please enter a valid quantity in Kg");
+      alert("Please enter a valid weight in Kg.");
       return;
     }
-
     try {
       await axios.post("http://localhost:5000/api/cart/add-to-cart", {
         userId,
@@ -57,7 +55,9 @@ const Product = () => {
           itemId: item._id,
           name: item.name,
           pricePerKg: item.pricePerKg,
+          weightPerBar: item.weightPerBar,
           quantity,
+          Available: item.availability,
           category: item.category,
           image: item.image,
         },
@@ -71,12 +71,11 @@ const Product = () => {
   };
 
   const handleUpdateQuantity = async (itemId, newQuantity) => {
-    if (!newQuantity || newQuantity <= 0) return;
-
+    if ((!newQuantity || newQuantity <= 0)) return;
     try {
       await axios.put("http://localhost:5000/api/cart/update-item", {
-        userId: user.uid,
-        itemId,
+        userId: user.email,
+        itemId: itemId,
         quantity: newQuantity,
       });
       fetchCart();
@@ -85,10 +84,10 @@ const Product = () => {
     }
   };
 
-  const handleRemoveItem = async (itemId) => {
+  const handleRemoveItem = async (item) => {
     try {
       await axios.delete("http://localhost:5000/api/cart/remove-item", {
-        data: { userId: user.uid, itemId },
+        data: { userId: user.email, itemId: item.itemId },
       });
       fetchCart();
     } catch (error) {
@@ -119,7 +118,7 @@ const Product = () => {
       fetchCart();
     } catch (error) {
       console.error("Checkout failed:", error);
-      alert("Checkout failed. Please try again.");
+      alert(error.response.data.message || "Checkout failed. Please try again.");
     }
   };
 
@@ -189,6 +188,11 @@ const Product = () => {
                 className="w-full h-40 object-cover rounded-md mb-4"
               />
               <h2 className="text-xl font-semibold text-slate-800">{item.name}</h2>
+              <p className="text-gray-600 mb-2">{item.description}</p>
+              <p className="text-gray-600 mb-2">Category: {item.category}</p>
+              <p className="text-gray-600 mb-2">Weight per Bar: {item.weightPerBar} Kg</p>
+              <p className="text-gray-600 mb-2">Length: {item.length || "12"} m</p>
+              <p className="text-gray-600 mb-2">Availability: {item.availability} / Kg</p>
               <p className="text-gray-600 mb-2">₹{item.pricePerKg} / Kg</p>
               <input
                 type="number"
@@ -228,6 +232,7 @@ const Product = () => {
                     <div>
                       <span className="font-medium text-slate-700">{item.name}</span> -{" "}
                       <span>{item.quantity} Kg</span>
+                      <span className="text-gray-500"> (Weight per Bar: {item.weightPerBar} Kg)</span>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                       <input
@@ -240,7 +245,7 @@ const Product = () => {
                         }
                       />
                       <button
-                        onClick={() => handleRemoveItem(item.itemId)}
+                        onClick={() => handleRemoveItem(item)}
                         className="text-red-600 hover:underline text-sm"
                       >
                         Remove

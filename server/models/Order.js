@@ -13,6 +13,7 @@ const orderSchema = new mongoose.Schema({
       pricePerKg: Number,
       category: String,
       image: String,
+      Bars: Number,
     },
   ],
   totalAmount: {

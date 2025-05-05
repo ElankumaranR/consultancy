@@ -1,21 +1,50 @@
+const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
-const Order = require("../models/Order");
 const Cart = require("../models/Cart");
+const Item = require("../models/Item");
+const Order = require("../models/Order");
 
-// POST /api/orders/create
 router.post("/create", async (req, res) => {
   const { userId } = req.body;
+  const session = await mongoose.startSession();
 
   try {
-    // Fetch the user's cart
-    const userCart = await Cart.findOne({ userId });
+    session.startTransaction();
+
+    const userCart = await Cart.findOne({ userId }).session(session);
 
     if (!userCart || userCart.items.length === 0) {
+      await session.abortTransaction();
       return res.status(400).json({ message: "Cart is empty" });
     }
 
-    // Calculate total amount
+    // Check availability for all items first
+    for (const cartItem of userCart.items) {
+      const dbItem = await Item.findById(cartItem.itemId).session(session);
+      if (!dbItem) {
+        await session.abortTransaction();
+        return res.status(404).json({ message: `Item not found: ${cartItem.itemId}` });
+      }
+
+      if (cartItem.quantity > dbItem.availability) {
+        await session.abortTransaction();
+        return res.status(400).json({
+          message: `Out of stock: ${dbItem.name}, Available: ${dbItem.availability}, Requested: ${cartItem.quantity}`,
+        });
+      }
+    }
+
+    // Deduct stock
+    for (const cartItem of userCart.items) {
+      await Item.findByIdAndUpdate(
+        cartItem.itemId,
+        { $inc: { availability: -cartItem.quantity } },
+        { session }
+      );
+    }
+
+    // Calculate total
     const totalAmount = userCart.items.reduce((total, item) => {
       return total + item.quantity * item.pricePerKg;
     }, 0);
@@ -27,17 +56,24 @@ router.post("/create", async (req, res) => {
       totalAmount,
     });
 
-    await newOrder.save();
+    await newOrder.save({ session });
 
-    // Clear the cart
-    await Cart.findOneAndUpdate({ userId }, { items: [] });
+    // Clear cart
+    await Cart.findOneAndUpdate({ userId }, { items: [] }, { session });
+
+    // Commit the transaction
+    await session.commitTransaction();
+    session.endSession();
 
     res.status(201).json({ message: "Order placed successfully", order: newOrder });
   } catch (error) {
-    console.error("Error placing order:", error);
+    await session.abortTransaction();
+    session.endSession();
+    console.error("Transaction failed:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 router.get("/user/:userId", async (req, res) => {
     try {
       const { userId } = req.params;
@@ -69,6 +105,13 @@ router.get("/user/:userId", async (req, res) => {
         return res.status(400).json({ error: "Only pending orders can be cancelled" });
       }
   
+      // Reassign item quantities to availability
+      for (const item of order.items) {
+        await Item.findByIdAndUpdate(item.itemId, {
+          $inc: { availability: item.quantity }
+        });
+      }
+  
       order.status = "Cancelled";
       order.statusUpdatedAt = now;
       order.cancellationDate = now;
@@ -78,14 +121,6 @@ router.get("/user/:userId", async (req, res) => {
     } catch (error) {
       console.error("Error cancelling order:", error);
       res.status(500).json({ error: "Internal Server Error" });
-    }
-  });
-  router.get("/", async (req, res) => {
-    try {
-      const orders = await Order.find().populate("userId", "email");
-      res.json(orders);
-    } catch (err) {
-      res.status(500).json({ error: "Server error fetching orders" });
     }
   });
   
@@ -188,18 +223,41 @@ router.get("/user/:userId", async (req, res) => {
   });
   
   
-  // PUT: Reject an order
   router.put("/:id/reject", async (req, res) => {
     const { id } = req.params;
     try {
-      const order = await Order.findByIdAndUpdate(
-        id,
-        { status: "Rejected" },
-        { new: true }
-      );
+      const order = await Order.findById(id);
+      if (!order) return res.status(404).json({ error: "Order not found" });
+  
+      if (order.status !== "Pending") {
+        return res.status(400).json({ error: "Only pending orders can be rejected" });
+      }
+  
+      // Reassign item quantities to availability
+      for (const item of order.items) {
+        await Item.findByIdAndUpdate(item.itemId, {
+          $inc: { availability: item.quantity }
+        });
+      }
+  
+      order.status = "Rejected";
+      order.statusUpdatedAt = new Date();
+      await order.save();
+  
       res.json({ message: "Order rejected", order });
     } catch (err) {
+      console.error("Error rejecting order:", err);
       res.status(500).json({ error: "Error rejecting order" });
+    }
+  });
+  router.get("/", async (req, res) => {
+    try {
+      const orders = await Order.find(); // if items have a reference to Item model
+  
+      res.status(200).json(orders);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      res.status(500).json({ error: "Server error fetching orders" });
     }
   });
 module.exports = router;

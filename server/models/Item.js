@@ -8,6 +8,7 @@ const itemSchema = new mongoose.Schema({
   category: { type: String },
   weightPerBar: { type: Number, required: true },  // in Kg
   length: { type: Number, default: 12 },           // in meters, optional
+  availability: { type: Number, default: 0 },      // number of bars available
 }, { timestamps: true });
 
 const Item = mongoose.model('Item', itemSchema);

@@ -5,6 +5,7 @@ const cartItemSchema = new mongoose.Schema({
   name: String,
   pricePerKg: Number,
   quantity: Number,
+  weightPerBar: Number,
   category: String,
   image: String,
 });

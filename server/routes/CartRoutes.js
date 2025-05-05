@@ -41,7 +41,7 @@ router.get("/:userId", async (req, res) => {
 
 // Update Item Quantity
 router.put("/update-item", async (req, res) => {
-  const { userId, itemId, quantity } = req.body;
+  const { userId, itemId, quantity} = req.body;
 
   try {
     const cart = await Cart.findOne({ userId });
@@ -77,7 +77,7 @@ router.delete("/remove-item", async (req, res) => {
     res.status(200).json(cart.items);
   } catch (error) {
     console.error("Remove item error:", error);
-    res.status(500).json({ message: "Failed to remove item." });
+    res.status(500).json({ message: "Failed to remove item."+error.message});
   }
 });
 
