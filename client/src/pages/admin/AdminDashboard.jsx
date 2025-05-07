@@ -29,7 +29,7 @@ const AdminDashboard = () => {
 
   const fetchAnalytics = async (year) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/orders/analytics/${year}`);
+      const res = await axios.get(`https://consultancy-yrz7.onrender.com/api/orders/analytics/${year}`);
       const { monthlySales, totalRevenue, totalOrders, categorySales } = res.data;
 
       const months = [

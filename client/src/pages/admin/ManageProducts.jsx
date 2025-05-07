@@ -18,7 +18,7 @@ const ManageProduct = () => {
 
   const fetchItems = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/items");
+      const res = await axios.get("https://consultancy-yrz7.onrender.com/admin/items");
       setItems(res.data);
     } catch (err) {
       console.error("Error fetching items:", err);
@@ -33,10 +33,10 @@ const ManageProduct = () => {
     e.preventDefault();
     try {
       if (editItemId) {
-        await axios.put(`http://localhost:5000/admin/update-item/${editItemId}`, item);
+        await axios.put(`https://consultancy-yrz7.onrender.com/admin/update-item/${editItemId}`, item);
         setEditItemId(null);
       } else {
-        await axios.post("http://localhost:5000/admin/add-item", item);
+        await axios.post("https://consultancy-yrz7.onrender.com/admin/add-item", item);
       }
       setItem({
         name: "",
@@ -62,7 +62,7 @@ const ManageProduct = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
       try {
-        await axios.delete(`http://localhost:5000/admin/delete-item/${id}`);
+        await axios.delete(`https://consultancy-yrz7.onrender.com/admin/delete-item/${id}`);
         fetchItems();
       } catch (err) {
         console.error("Error deleting item:", err);

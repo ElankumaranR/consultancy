@@ -13,7 +13,7 @@ const ManageOrder = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/orders");
+      const res = await axios.get("https://consultancy-yrz7.onrender.com/api/orders");
       setOrders(res.data);
     } catch (err) {
       console.error("Error fetching orders:", err);
@@ -27,7 +27,7 @@ const ManageOrder = () => {
     }
 
     try {
-      const res = await axios.put(`http://localhost:5000/api/orders/${orderId}/accept`, {
+      const res = await axios.put(`https://consultancy-yrz7.onrender.com/api/orders/${orderId}/accept`, {
         proposedMeetDates: dates,
       });
       setMessage(res.data.message);
@@ -40,7 +40,7 @@ const ManageOrder = () => {
 
   const handleReject = async (orderId) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/orders/${orderId}/reject`);
+      const res = await axios.put(`https://consultancy-yrz7.onrender.com/api/orders/${orderId}/reject`);
       setMessage(res.data.message);
       fetchOrders();
     } catch (err) {

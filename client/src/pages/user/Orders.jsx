@@ -16,7 +16,7 @@ const Order = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/orders/user/${userId}`);
+      const res = await axios.get(`https://consultancy-yrz7.onrender.com/api/orders/user/${userId}`);
       // Safely set orders
       console.log(res,userId)
       if (Array.isArray(res.data)) {
@@ -34,7 +34,7 @@ const Order = () => {
 
   const handleCancel = async (orderId) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/orders/${orderId}/cancel`);
+      const res = await axios.put(`https://consultancy-yrz7.onrender.com/api/orders/${orderId}/cancel`);
       setMessage(res.data.message);
       fetchOrders(); // Refresh orders
     } catch (err) {

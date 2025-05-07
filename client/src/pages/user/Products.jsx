@@ -24,7 +24,7 @@ const Product = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/admin/items");
+      const response = await axios.get("https://consultancy-yrz7.onrender.com/admin/items");
       setItems(response.data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -34,7 +34,7 @@ const Product = () => {
   const fetchCart = async () => {
     if (!user) return;
     try {
-      const response = await axios.get(`http://localhost:5000/api/cart/${user.email}`);
+      const response = await axios.get(`https://consultancy-yrz7.onrender.com/api/cart/${user.email}`);
       setCart(response.data);
     } catch (error) {
       console.error("Error fetching cart:", error);
@@ -49,7 +49,7 @@ const Product = () => {
       return;
     }
     try {
-      await axios.post("http://localhost:5000/api/cart/add-to-cart", {
+      await axios.post("https://consultancy-yrz7.onrender.com/api/cart/add-to-cart", {
         userId,
         item: {
           itemId: item._id,
@@ -73,7 +73,7 @@ const Product = () => {
   const handleUpdateQuantity = async (itemId, newQuantity) => {
     if ((!newQuantity || newQuantity <= 0)) return;
     try {
-      await axios.put("http://localhost:5000/api/cart/update-item", {
+      await axios.put("https://consultancy-yrz7.onrender.com/api/cart/update-item", {
         userId: user.email,
         itemId: itemId,
         quantity: newQuantity,
@@ -86,7 +86,7 @@ const Product = () => {
 
   const handleRemoveItem = async (item) => {
     try {
-      await axios.delete("http://localhost:5000/api/cart/remove-item", {
+      await axios.delete("https://consultancy-yrz7.onrender.com/api/cart/remove-item", {
         data: { userId: user.email, itemId: item.itemId },
       });
       fetchCart();
@@ -108,7 +108,7 @@ const Product = () => {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/orders/create", {
+      await axios.post("https://consultancy-yrz7.onrender.com/api/orders/create", {
         userId,
         items: cart,
         totalPrice,
