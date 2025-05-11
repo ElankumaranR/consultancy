@@ -57,7 +57,7 @@ const Login = () => {
 
         <p className="text-center text-gray-400 mt-4">
           Don't have an account? 
-          <a href="/register" className="text-blue-500 hover:text-blue-400 transition ml-1">Join</a>
+          <a href="/join" className="text-blue-500 hover:text-blue-400 transition ml-1">Join</a>
         </p>
       </div>
     </div>
