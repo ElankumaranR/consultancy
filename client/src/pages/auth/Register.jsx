@@ -53,7 +53,7 @@ const Register = () => {
         </form>
 
         <p className="text-center text-gray-400 mt-4">
-          Already a rider? 
+          Already a register? 
           <a href="/" className="text-green-400 hover:text-green-300 transition ml-1">Login Here</a>
         </p>
       </div>
