@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AdminNavbar from "./components/AdminNavbar";
+import { getUnit } from "../utils/categoryUnits";
 
 const ManageOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -77,7 +78,7 @@ const ManageOrder = () => {
                 <strong>Items:</strong>
                 <ul className="list-disc list-inside">
                   {order.items.map((item, idx) => (
-                    <li key={idx}>{item.name} - {item.quantity}kg @ ₹{item.pricePerKg}/kg</li>
+                    <li key={idx}>{item.name} - {item.quantity}{getUnit(item.category)} @ ₹{item.pricePerKg}/{getUnit(item.category)}</li>
                   ))}
                 </ul>
               </div>

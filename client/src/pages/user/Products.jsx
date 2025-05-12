@@ -3,6 +3,8 @@ import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { motion } from "framer-motion";
 import Navbar from "./Navbar";
+import { getUnit } from '../utils/categoryUnits';
+
 const Product = () => {
   const [items, setItems] = useState([]);
   const [cart, setCart] = useState([]);
@@ -45,7 +47,7 @@ const Product = () => {
     const userId = user.email;
     const quantity = parseFloat(weightToAdd[item._id]);
     if (!quantity || quantity <= 0) {
-      alert("Please enter a valid weight in Kg.");
+      alert("Please enter a valid unit.");
       return;
     }
     try {
@@ -190,13 +192,13 @@ const Product = () => {
               <h2 className="text-xl font-semibold text-slate-800">{item.name}</h2>
               <p className="text-gray-600 mb-2">{item.description}</p>
               <p className="text-gray-600 mb-2">Category: {item.category}</p>
-              <p className="text-gray-600 mb-2">Weight per Bar: {item.weightPerBar} Kg</p>
+              <p className="text-gray-600 mb-2">Weight : {item.weightPerBar} Kg</p>
               <p className="text-gray-600 mb-2">Length: {item.length || "12"} m</p>
-              <p className="text-gray-600 mb-2">Availability: {item.availability} / Kg</p>
-              <p className="text-gray-600 mb-2">₹{item.pricePerKg} / Kg</p>
+              <p className="text-gray-600 mb-2">Availability: {item.availability} {getUnit(item.category)}</p>
+              <p className="text-gray-600 mb-2">₹{item.pricePerKg} / {getUnit(item.category)}</p>
               <input
                 type="number"
-                placeholder="Weight in Kg"
+                placeholder="units"
                 min="1"
                 className="border rounded p-1 w-full mb-2"
                 value={weightToAdd[item._id] || ""}
@@ -231,8 +233,8 @@ const Product = () => {
                   <li key={item.itemId} className="flex justify-between items-center">
                     <div>
                       <span className="font-medium text-slate-700">{item.name}</span> -{" "}
-                      <span>{item.quantity} Kg</span>
-                      <span className="text-gray-500"> (Weight per Bar: {item.weightPerBar} Kg)</span>
+                      <span>{item.quantity} {getUnit(item.category)}</span>
+                      <span className="text-gray-500"> (Weight: {item.weightPerBar} Kg)</span>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                       <input

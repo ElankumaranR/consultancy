@@ -3,6 +3,7 @@ import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import { getUnit } from "../utils/categoryUnits";
 const Order = () => {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -81,7 +82,7 @@ const Order = () => {
               <ul className="list-disc list-inside">
                 {order.items.map((item, index) => (
                   <li key={index}>
-                    {item.name} - {item.quantity} kg @ ₹{item.pricePerKg}/kg
+                    {item.name} - {item.quantity} {getUnit(item.category)} @ ₹{item.pricePerKg}/{getUnit(item.category)}
                   </li>
                 ))}
               </ul>

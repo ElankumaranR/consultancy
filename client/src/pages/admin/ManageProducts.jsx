@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AdminNavbar from "./components/AdminNavbar";
+import { getUnit } from "../utils/categoryUnits";
 
 const ManageProduct = () => {
   const [items, setItems] = useState([]);
@@ -94,7 +95,7 @@ const ManageProduct = () => {
           <input
             type="number"
             name="pricePerKg"
-            placeholder="Price per Kg"
+            placeholder="Price per unit"
             value={item.pricePerKg}
             onChange={handleChange}
             className="p-2 border rounded"
@@ -103,7 +104,7 @@ const ManageProduct = () => {
           <input
             type="number"
             name="weightPerBar"
-            placeholder="Weight per Bar (kg)"
+            placeholder="Weight (kg)"
             value={item.weightPerBar}
             onChange={handleChange}
             className="p-2 border rounded"
@@ -129,7 +130,7 @@ const ManageProduct = () => {
           <input
             type="number"
             name="availability"
-            placeholder="Availability (Number of Bars)"
+            placeholder="Availability "
             value={item.availability}
             onChange={handleChange}
             className="p-2 border rounded"
@@ -171,10 +172,10 @@ const ManageProduct = () => {
               )}
               <h3 className="text-lg font-bold">{it.name}</h3>
               <p className="text-sm text-gray-600">{it.description}</p>
-              <p className="mt-1">Price: ₹{it.pricePerKg} / Kg</p>
-              <p>Weight per Bar: {it.weightPerBar} Kg</p>
+              <p className="mt-1">Price: ₹{it.pricePerKg} / {getUnit(it.category)}</p>
+              <p>Weight: {it.weightPerBar} Kg</p>
               <p>Length: {it.length || "12"} m</p>
-              <p>Availability: {it.availability} bars</p>
+              <p>Availability: {it.availability} {getUnit(it.category)}</p>
               <p className="text-xs text-gray-500">Category: {it.category}</p>
 
               <div className="mt-3 flex gap-2">
