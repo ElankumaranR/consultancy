@@ -12,5 +12,5 @@ export const categoryUnits = [
 // Reusable function
 export function getUnit(category) {
   const found = categoryUnits.find(item => item.category.toLowerCase() === category.toLowerCase());
-  return found ? found.unit : "kg";
+  return found ? found.unit : "Unit";
 }
