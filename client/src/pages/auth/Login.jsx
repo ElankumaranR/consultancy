@@ -19,7 +19,7 @@ const Login = () => {
       if (email === "elankumaran2103@gmail.com")
         navigate("/admin/dashboard");
       else
-        navigate("/dashboard");
+        navigate("/");
     } catch (err) {
       setError("Invalid email or password.");
     }

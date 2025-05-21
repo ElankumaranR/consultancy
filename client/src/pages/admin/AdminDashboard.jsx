@@ -61,7 +61,7 @@ const AdminDashboard = () => {
     <>
       <AdminNavbar />
       <div className="p-6">
-        <h2 className="text-2xl font-bold mb-4">Admin Dashboard</h2>
+        <h2 className="text-2xl font-bold mb-4">SRI RAGHAVENDRA STEELS</h2>
 
         {/* Year Selector */}
         <div className="mb-4">

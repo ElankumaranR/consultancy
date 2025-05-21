@@ -16,7 +16,7 @@ const Navbar = () => {
   };
     return (
     <nav className="bg-gray-800 text-white px-6 py-4 shadow-md flex justify-between items-center">
-      <div className="text-xl font-bold">Steel Admin Panel</div>
+      <div className="text-xl font-bold">SR STEELS</div>
       <ul className="flex space-x-6">
         <li>
           <Link to="/calculator" className="hover:text-yellow-400">
@@ -24,7 +24,7 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/dashboard" className="hover:text-yellow-400">
+          <Link to="/" className="hover:text-yellow-400">
             Dashboard
           </Link>
         </li>
