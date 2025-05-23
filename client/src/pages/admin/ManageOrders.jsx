@@ -22,22 +22,30 @@ const ManageOrder = () => {
   };
 
   const handleAccept = async (orderId) => {
-    const dates = proposedDates[orderId];
-    if (!dates || dates.length !== 3) {
-      return alert("Please provide exactly 3 proposed meet dates.");
-    }
+  const dates = proposedDates[orderId];
+  if (!dates || dates.length !== 3) {
+    return alert("Please provide exactly 3 proposed meet dates.");
+  }
 
-    try {
-      const res = await axios.put(`https://consultancy-yrz7.onrender.com/api/orders/${orderId}/accept`, {
-        proposedMeetDates: dates,
-      });
-      setMessage(res.data.message);
-      fetchOrders();
-    } catch (err) {
-      console.error(err);
-      setMessage("Error accepting order.");
-    }
-  };
+  const today = new Date();
+  const allFutureDates = dates.every(date => new Date(date) > today);
+
+  if (!allFutureDates) {
+    return alert("All proposed meet dates must be in the future.");
+  }
+
+  try {
+    const res = await axios.put(`https://consultancy-yrz7.onrender.com/api/orders/${orderId}/accept`, {
+      proposedMeetDates: dates,
+    });
+    setMessage(res.data.message);
+    fetchOrders();
+  } catch (err) {
+    console.error(err);
+    setMessage("Error accepting order.");
+  }
+};
+
 
   const handleReject = async (orderId) => {
     try {
