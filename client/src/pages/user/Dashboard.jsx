@@ -87,34 +87,61 @@ const Home = () => {
             )}
           </div>
         </header>
-
-        {/* Products grid below header */}
+{/* Produt Grid */}
         {!loading && items.length > 0 && (
-          <section className="max-w-6xl mx-auto py-12 px-6">
-            <h2 className="text-3xl font-bold mb-8 text-center">Our Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-              {items.map((item) => (
-                <div
-                  key={item._id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold">{item.name}</h3>
-                    <p className="mt-2 text-red-600 font-bold">
-                      ${item.pricePerKg} / Kg
-                    </p>
-                    <p className="mt-1 text-gray-700 text-sm">{item.description}</p>
-                  </div>
-                </div>
-              ))}
+  <section className="max-w-6xl mx-auto py-12 px-6">
+    <h2 className="text-3xl font-bold mb-8 text-center">Our Products</h2>
+    <Slider
+      {...{
+        dots: true,
+        infinite: true,
+        speed: 600,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 10000, // 10 seconds
+        arrows: true, // enables left/right buttons
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 1,
+            },
+          },
+          {
+            breakpoint: 640,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+            },
+          },
+        ],
+      }}
+    >
+      {items.map((item) => (
+        <div key={item._id} className="px-3">
+          <div className="bg-white rounded-lg shadow-md overflow-hidden h-full">
+            <img
+              src={item.image}
+              alt={item.name}
+              className="w-full h-48 object-cover"
+              loading="lazy"
+            />
+            <div className="p-4">
+              <h3 className="text-lg font-semibold">{item.name}</h3>
+              <p className="mt-2 text-red-600 font-bold">
+                ${item.pricePerKg} / Kg
+              </p>
+              <p className="mt-1 text-gray-700 text-sm">{item.description}</p>
             </div>
-          </section>
-        )}
+          </div>
+        </div>
+      ))}
+    </Slider>
+  </section>
+)}
+
       </div>
     </>
   );
