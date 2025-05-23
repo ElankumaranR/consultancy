@@ -89,8 +89,14 @@ const Home = () => {
             </div>
           )}
 
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center px-6 text-center text-white">
-            <h1 className="text-5xl font-bold uppercase drop-shadow-lg max-w-3xl">
+<div
+  className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center text-white bg-cover bg-center"
+  style={{
+    backgroundImage: `url('/Bg.png')`,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundBlendMode: 'overlay',
+  }}
+>            <h1 className="text-5xl font-bold uppercase drop-shadow-lg max-w-3xl">
               SRI RAGHAVENDRA STEELS
             </h1>
             <p className="mt-4 text-lg drop-shadow-md max-w-2xl">
